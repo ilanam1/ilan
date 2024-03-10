@@ -1,0 +1,81 @@
+
+# Check if the email ends with @ac.sce.ac.il or if the user already exists
+
+'''
+These are two functions that need to be included in the views file within the "if request.method=='POST':" statement
+'''
+
+def is_email_valid(email):
+    """Check if the email ends with @ac.sce.ac.il."""
+    return email.endswith('@ac.sce.ac.il')
+
+def does_user_exist(email):
+    """Check if a user with this email already exists."""
+    return User.objects.filter(email=email).exists()
+
+'''
+In the views file at the top, we must add the following: from django.contrib import messages
+
+In the views file After the initialization of email we must add the following lines:
+[
+if not is_valid_email(email):
+    messages.error(request, 'ניתן להירשם רק עם דוא"ל מכללתי.')
+    return render(request, 'sighUp.html')
+if does_user_exist(email):
+    messages.error(request, 'דוא"ל זה כבר רשום במערכת. נסה להרשם עם דוא"ל אחר.')
+    return render(request, 'sighUp.html')
+]
+
+In addition, the is_valid_email function should also be called when someone wants to sign in.
+'''
+
+
+
+from django.test import TestCase
+import unittest
+
+'''
+The following is the unit test that I wrote:'''
+
+class TestValidateEmail(unittest.TestCase):
+    '''
+    The following is the unit test that I wrote:'''
+
+    def test_email_validation(self):
+
+        # The following is the unit test that I wrote:
+
+        # Email that should pass the validation
+        self.assertTrue(is_email_valid('yosi@ac.sce.ac.il'))
+
+        # Email that should fail the validation
+        self.assertFalse(is_email_valid('yosi@gmail.com'))
+
+    def test_valid_email(self):
+        # This is the unit test created by AI perplexity
+
+        assert is_email_valid('example@ac.sce.ac.il') == True
+
+    def test_invalid_email(self):
+        # This is the unit test created by AI perplexity
+
+        assert is_email_valid('invalidemail@example.com') == False
+
+
+
+class AITestValidateEmail(unittest.TestCase):
+
+    def test_user_exists(self):
+        from django.contrib.auth.models import User
+        # This is the unit test created by AI perplexity,
+        # This checks if the user exists in the data base and if it exists, then the email cannot be used again to sign up
+
+        # Create a user with the specified email
+        new_user = User.objects.create(first_name="קטורה", last_name="שלמה", gender="נקבה", degree="הנדסת תוכנה",
+                                       birth_date="1999-4-22", email='ketursh@ac.sce.ac.il', password='12345Li!5')
+        # Check if the user exists
+        assert does_user_exist('ketursh@ac.sce.ac.il') == True
+
+
+if __name__ == '__main__':
+    unittest.main()
